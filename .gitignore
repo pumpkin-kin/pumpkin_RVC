@@ -1,0 +1,22 @@
+# Local configuration
+configs/config.json
+
+# Downloaded models and indexes
+.model-downloads/
+assets/hubert_base/
+assets/indices/
+assets/pretrained_v2/
+assets/rmvpe/
+assets/weights/
+
+# Generated files, logs, and runtime
+TEMP/
+logs/
+runtime/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+
+# Bundled local executables
+ffmpeg.exe
+ffprobe.exe

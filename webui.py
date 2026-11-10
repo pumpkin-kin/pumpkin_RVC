@@ -777,11 +777,11 @@ def train_task_stopped(state):
 
 
 def start_train_process(state, cmd):
-    kwargs = {"shell": True, "cwd": now_dir}
+    child_env = os.environ.copy()
+    child_env["PYTHONPATH"] = now_dir + os.pathsep + child_env.get("PYTHONPATH", "")
+    kwargs = {"shell": True, "cwd": now_dir, "env": child_env}
     if "train/train.py" in cmd.replace("\\", "/"):
-        training_env = os.environ.copy()
-        training_env["RVC_CUDA_GRAPH"] = "0"
-        kwargs["env"] = training_env
+        child_env["RVC_CUDA_GRAPH"] = "0"
     if platform.system() == "Windows":
         kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
     else:
@@ -864,7 +864,7 @@ def run_preprocess_dataset(
         if is_multispeaker_mode(training_mode)
         else ""
     )
-    cmd = '"%s" train/preprocess.py "%s" %s %s "%s/logs/%s" %s %.1f%s' % (
+    cmd = '"%s" -m train.preprocess "%s" %s %s "%s/logs/%s" %s %.1f%s' % (
         config.python_cmd,
         trainset_dir,
         sr,
